@@ -1,3 +1,6 @@
-﻿  ReferenceCode.cpp
-C:\Users\kjaer\Desktop\Dev\Tetris\Tetris\ReferenceCode.cpp(323,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Tetris.vcxproj -> C:\Users\kjaer\Desktop\Dev\Tetris\Debug\Tetris.exe
+﻿  main.cpp
+  ReferenceCode.cpp
+C:\Users\kjaer\Documents\GitHub\TetrisCopy\Tetris\Tetris\ReferenceCode.cpp(325,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  LINK : C:\Users\kjaer\Documents\GitHub\TetrisCopy\Tetris\Debug\Tetris.exe not found or not built by the last incremental link; performing full link
+  Tetris.vcxproj -> C:\Users\kjaer\Documents\GitHub\TetrisCopy\Tetris\Debug\Tetris.exe

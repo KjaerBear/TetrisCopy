@@ -1,0 +1,22 @@
+﻿  main.cpp
+  ReferenceCode.cpp
+C:\Users\kjaer\Documents\GitHub\TetrisCopy\Tetris\Tetris\ReferenceCode.cpp(325,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_SetWindowTitle referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_DestroyWindow referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_PollEvent referenced in function "void __cdecl input(void)" (?input@@YAXXZ)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_SetHint referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_CreateWindowAndRenderer referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_SetRenderDrawColor referenced in function "void __cdecl drawCur(struct shape)" (?drawCur@@YAXUshape@@@Z)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_RenderClear referenced in function "void __cdecl render(void)" (?render@@YAXXZ)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_RenderDrawRect referenced in function "void __cdecl drawCur(struct shape)" (?drawCur@@YAXUshape@@@Z)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_RenderFillRect referenced in function "void __cdecl drawCur(struct shape)" (?drawCur@@YAXUshape@@@Z)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_RenderPresent referenced in function "void __cdecl render(void)" (?render@@YAXXZ)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_DestroyRenderer referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_GetTicks referenced in function "void __cdecl render(void)" (?render@@YAXXZ)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_Delay referenced in function "void __cdecl render(void)" (?render@@YAXXZ)
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_Init referenced in function main
+ReferenceCode.obj : error LNK2019: unresolved external symbol SDL_Quit referenced in function main
+C:\Users\kjaer\Desktop\Dev\SDL2-2.26.1\lib\x86\SDL2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\kjaer\Desktop\Dev\SDL2-2.26.1\lib\x86\SDL2main.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\kjaer\Documents\GitHub\TetrisCopy\Tetris\x64\Debug\Tetris.exe : fatal error LNK1120: 15 unresolved externals

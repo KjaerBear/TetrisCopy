@@ -2,6 +2,10 @@
 #include "SDL.h"
 #include <vector>
 #include <iostream>
+//Add VC++ Include FIle
+//C++ Include FIles to SDL
+// Linker General Include x86 File
+// Additional Include: (Input Section) SDL2.lib + SDL2main.lib
 //308
 #define WIDTH 308
 #define HEIGHT 600
