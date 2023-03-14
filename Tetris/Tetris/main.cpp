@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include <vector>
 #include <iostream>
-//Add VC++ Include FIle
+//Add VC++ Drectories Include FIle
 //C++ Include FIles to SDL
 // Linker General Include x86 File
 // Additional Include: (Input Section) SDL2.lib + SDL2main.lib
@@ -255,35 +255,24 @@ void dropTime() {
 
 void checkRows() {
     bool rowFull;
-    block tmp[14];
 
     for (int i = 0; i < 27; i++) {
         rowFull = true;
         for (int j = 0; j < 14; j++) {
-            if (!gameGrid[i][j].active) {
+            if (!gameGrid[i][j].active) { // Checks if there is a full row
                 rowFull = false;
             }
         }
-        if (rowFull) {
-            for (int j = 0; j < 14; j++) {
+        if (rowFull) { // If there is a full row
+            for (int j = 0; j < 14; j++) { // set the all full row to an empty row
                 gameGrid[i][j].active = false;
             }
-
-            for (int k = i; k > 0; k--) {
-
+            for (int k = i; k > 0; k--) {               // Starting at the row that was full
                 for (int j = 0; j < 14; j++) {
-                    gameGrid[k][j] = gameGrid[k-1][j];
+                    gameGrid[k][j] = gameGrid[k-1][j]; //Set the row we are on to the row above it 
                 }
-
-                for (int j = 0; j < 14; j++) { // save the row we are writing over into a temp arrry
-                    tmp[j] = gameGrid[k-1][j];
-                }
-                
-
-
             }
         }
-           
     }
 }
 
