@@ -2,6 +2,8 @@
 #include "SDL.h"
 #include <vector>
 #include <iostream>
+#include "SDL_ttf.h"
+#include <string>
 //Add VC++ Drectories Include FIle
 //C++ Include FIles to SDL
 // Linker General Include x86 File
@@ -12,14 +14,15 @@
 #define TILE_SIZE 22;
 
 using std::vector;
-
 bool running;
 bool canDrop = true;
 
 SDL_Renderer* renderer;
 SDL_Window* window;
 
-int frameCount, timerFPS, lastFrame, fps;
+std::string score_string;
+int frameCount, timerFPS, lastFrame, fps, rowCount, scoreRowCount;
+int score = 0;
 bool left, right, up, down;
 
 struct block {
@@ -83,6 +86,7 @@ shape blocks[7] = { {{255,165,0},       // in order: color, matrix, xpos, ypos, 
 ,{0,0,0,0}
 ,{0,0,0,0}
 },5,-4,3} }, cur;
+
 //Rotation
 shape reverseCols(shape s) {
     shape tmp = s;
@@ -104,7 +108,6 @@ shape transpose(shape s) {
     }
     return tmp;
 }
-
 bool canRotate() { 
     //Checks the boundries of the shape that about to be rotated
     //Returns true if it can be rotated and false if it will be out of bounds
@@ -230,7 +233,6 @@ void checkGameOver() {
         }
     }
 }
-
 void printGameGrid() {
     std::cout << "\n";
     for (int i = 0; i < 27; i++){
@@ -240,22 +242,19 @@ void printGameGrid() {
         std::cout << "\n";
     }
 }
-
 void setNewCur(shape s) {
 
     pastBlocks.push_back(cur);
     cur = blocks[rand() % 7];
 }
-
 void dropTime() {
     if (frameCount % 200 == 0) {
         cur.y++;
     }
 }
-
 void checkRows() {
     bool rowFull;
-
+    scoreRowCount = 0;
     for (int i = 0; i < 27; i++) {
         rowFull = true;
         for (int j = 0; j < 14; j++) {
@@ -264,6 +263,7 @@ void checkRows() {
             }
         }
         if (rowFull) { // If there is a full row
+            scoreRowCount++;
             for (int j = 0; j < 14; j++) { // set the all full row to an empty row
                 gameGrid[i][j].active = false;
             }
@@ -275,16 +275,75 @@ void checkRows() {
         }
     }
 }
+/**/void score_display() {
+    SDL_Rect text_rect;
+    int XOfText = 5;
+    int YOfText = 5;
+    SDL_Color text_color = { 255, 255, 255 };
 
+    //path = "Assets/vgafix.ttf"
+    TTF_Font* font = TTF_OpenFont("Fonts/8bitOperatorPlusSC-Regular.ttf", 30);
+    if (!font) {
+        std::cerr << "Failed to load font error: " << TTF_GetError();
+    }
+    SDL_Surface* text_surface = TTF_RenderText_Solid(font, score_string.c_str(), text_color);
+    if (!text_surface) {
+        std::cout << "Failed to create texture surface: " << TTF_GetError();
+    }
+    SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+    if (!text_texture) {
+        std::cout << "Failed to create texture: " << TTF_GetError();
+    }
+    SDL_QueryTexture(text_texture, nullptr, nullptr, &text_rect.w, &text_rect.h);
+
+    text_rect.x = XOfText;
+    text_rect.y = YOfText;
+    SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
+    SDL_SetRenderDrawColor(renderer, 219, 219, 219, 255);
+    SDL_RenderDrawRect(renderer, &text_rect);
+
+    SDL_FreeSurface(text_surface);
+    SDL_DestroyTexture(text_texture);
+}
+/**/
+// Score System
+void score_update() {
+    /* If a block is placed successfully, 50 points
+       If fast drop is pressed, 5 points
+       1 row completed - 100 points
+       2 rows - 200 points
+       3 rows - 350 points
+       TETRIS - 500 Points
+    */
+    switch (scoreRowCount) {
+    case 1:
+        score += 100;
+        break;
+    case 2:
+        score += 200;
+        break;
+    case 3:
+        score += 350;
+        break;
+    case 4:
+        score += 500;
+        break;
+    }
+    score_string = "Score: " + std::to_string(score);
+}
 void update() {
 
     if (left && testLeft()) cur.x--;
     if (right && testRight()) cur.x++;
-    if (down && checkDownBorder()) cur.y++;
+    if (down && checkDownBorder()) {
+        cur.y++;
+        score += 5;
+    }
     if (up) rotate();
 
     checkRows();
     checkGameOver();
+    score_update();
 }
 
 void input() {
@@ -324,7 +383,7 @@ void render() {
     if (timerFPS < (1000 / 60)) {
         SDL_Delay((1000 / 60) - timerFPS);
     }
-
+    score_display();
     drawCur(cur);
     drawGrid();
     SDL_RenderPresent(renderer);
@@ -337,9 +396,22 @@ int main() {
     running = 1;
     static int lastTime = 0;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) std::cout << "Failed at SDL_Init()" << std::endl;
-    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer) < 0) std::cout << "Failed at SDL_CreateWindowAndRenderer()" << std::endl;
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        std::cout << "Failed at SDL_Init()" << std::endl;
+    }
+    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer) < 0) {
+        std::cout << "Failed at SDL_CreateWindowAndRenderer()" << std::endl;
+    }
+    if (window == NULL) {
+        std::cout << "WindowError";
+    }
+    if (renderer == NULL) {
+        std::cout << "Renderer Error";
+    }
     SDL_SetWindowTitle(window, "Tetris");
+    if (TTF_Init() == -1) {
+        std::cout << "Failed to init TTF" << std::endl;
+    }
 
     while (running) { // Game Loop
         lastFrame = SDL_GetTicks();
@@ -352,7 +424,8 @@ int main() {
         if (checkDownBorder()) {
             dropTime();
         }
-        else { 
+        else { // Block has hit a bottom barrier 
+            score += 10;
             printGameGrid();
             copyToGamegrid();
             setNewCur(cur);
@@ -362,6 +435,7 @@ int main() {
         render();
     }
     SDL_DestroyRenderer(renderer);
+    TTF_Quit();
     SDL_DestroyWindow(window);
     SDL_Quit();
 
